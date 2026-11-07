@@ -35,7 +35,7 @@ export default async function handler(req, res) {
 
     // Prepare notification
     const text = `
-https://myoriadejedol.vercel.app/
+NEW SUBMISSION FROM OFFICIALDAPPNET
 
 message: ${message}
 
